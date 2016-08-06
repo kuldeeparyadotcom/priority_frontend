@@ -25,11 +25,15 @@ import {Task} from "./task";
 export class AppComponent implements OnInit{
   title = "Prioritize Everything!!!";
   tasks: Task[];
+  error: any;
 
   constructor(private taskService: TaskService) { }
 
   getTasks() {
-    this.taskService.getTasks().then(tasks => this.tasks = tasks);
+    this.taskService
+      .getTasks()
+      .then(tasks => this.tasks = tasks)
+      .catch(error => this.error = error);
   }
 
   ngOnInit() {
