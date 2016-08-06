@@ -18,6 +18,8 @@ export class TaskService {
       .then(response => response.json() as Task[])
       .catch(this.handleError);
 
+    //Either limit here to show only iscompleted === false tasks or limit at API level itself
+
   }
 
   private handleError(error: any) {
