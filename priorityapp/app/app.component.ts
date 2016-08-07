@@ -27,7 +27,7 @@ import {Task} from "./task";
                 <div class="row container">
                 <input class="col-lg-10" type="text" #newTask
                     (keyup.enter)="addNewTask(newTask.value); newTask.value=''"
-                     (blur)="addNewTask(newTask.value); newTask.value='' ">
+                     (blur)="addNewTask(newTask.value); newTask.value='' " placeholder="Enter your task!">
                 <div class="col-lg-2">   
                     <button (click)=addNewTask(newTask.value)>Add New Task </button>  
                 </div>
@@ -124,7 +124,10 @@ export class AppComponent implements OnInit{
     console.log(task);
 
     //Update database to mark task complete
-
+    //Refresh this component once task is successfully added to mongo db
+    this.taskService.updateTask(task)
+      .then( newly_updated_task => this.getTasks())
+      .catch(error => this.error = error);
 
   }
 
