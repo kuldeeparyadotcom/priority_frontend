@@ -108,6 +108,13 @@ export class AppComponent implements OnInit{
     console.log(task);
     task.priority = task.priority % 5 + 1;
     console.log(task);
+
+    //call service to update priority
+    //Refresh this component once task is successfully added to mongo db
+    this.taskService.updateTask(task)
+      .then( newly_updated_task => this.getTasks())
+      .catch(error => this.error = error);
+
   }
 
   mark_complete(task: Task) {
@@ -117,6 +124,8 @@ export class AppComponent implements OnInit{
     console.log(task);
 
     //Update database to mark task complete
+
+
   }
 
   addNewTask(newTask_task: string) {
@@ -126,6 +135,7 @@ export class AppComponent implements OnInit{
       let newly_added_task = {};
 
       this.new_task = {
+        _id: null, //Just to be in sync with Task class definition
         task: newTask_task,
         user: 'kd',
         priority: 1,
@@ -137,14 +147,11 @@ export class AppComponent implements OnInit{
 
       //Add this.new_task to database using http post
       //call service to add new task
-      //this.taskService.addTask(this.new_task);
 
-      //screen should be loaded automatically after new task addition
       console.log('current value of tasks');
       console.log(this.tasks);
 
-      //this.taskService.addTask(this.new_task);
-
+      //Refresh this component once task is successfully added to mongo db
       this.taskService.addTask(this.new_task)
         .then( newly_added_task => this.getTasks())
         .catch(error => this.error = error);
