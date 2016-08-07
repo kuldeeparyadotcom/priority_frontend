@@ -1,9 +1,9 @@
 export class Task {
-  _id: String;
-  task: String;
-  user: String;
-  priority: Number;
+  //_id: string;
+  task: string;
+  user: string;
+  priority: number;
   iscompleted: boolean;
-  __v: Number;
+  //__v: Number;
 
 }

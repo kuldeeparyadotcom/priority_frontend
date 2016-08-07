@@ -10,6 +10,22 @@ import {Task} from "./task";
           <h1> {{title}} </h1>
           <br />
           
+          
+           
+           <div class="container">
+                <div class="row container">
+                <input class="col-lg-10" type="text" #newTask
+                    (keyup.enter)="addNewTask(newTask.value)"
+                     (blur)="addNewTask(newTask.value); newTask.value='' ">
+                <div class="col-lg-2">   
+                    <button (click)=addNewTask(newTask.value)>Add New Task </button>  
+                </div>
+                </div>
+          </div>
+
+          
+          <br />
+          
             <div *ngFor="let task of tasks">          
               
               <div *ngIf="task.priority === 1 && task.iscompleted === false" class="container-fluid"> 
@@ -57,6 +73,8 @@ export class AppComponent implements OnInit{
   tasks: Task[];
   error: any;
 
+  new_task: Task;
+
   constructor(private taskService: TaskService) { }
 
   getTasks() {
@@ -70,23 +88,41 @@ export class AppComponent implements OnInit{
     this.getTasks();
   }
 
-  change_priority(task) {
-    console.log(task);
-    console.log('changing priority');
-    var current_priority = task.priority;
-    task.priority = current_priority % 5 + 1;
-    console.log(task);
-    //Update database with changed priority
 
+  change_priority(task: Task) {
+    console.log('Chaning priority');
+    console.log(task);
+    task.priority = task.priority % 5 + 1;
+    console.log(task);
   }
 
-  mark_complete(task) {
+  mark_complete(task: Task) {
     console.log(task);
     console.log('marking complete');
     task.iscompleted = true;
     console.log(task);
 
     //Update database to mark task complete
+  }
+
+  addNewTask(newTask_task: string) {
+
+    if (newTask_task.length) {
+
+      this.new_task = {
+        task: newTask_task;
+        user: 'kd';
+        priority: 1;
+        iscompleted: false
+      };
+
+      console.log('adding new task');
+      console.log(this.new_task);
+
+      //Add this.new_task to database using http post
+
+    }
+
   }
 
 }
