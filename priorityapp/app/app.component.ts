@@ -110,9 +110,9 @@ export class AppComponent implements OnInit{
     if (newTask_task.length) {
 
       this.new_task = {
-        task: newTask_task;
-        user: 'kd';
-        priority: 1;
+        task: newTask_task,
+        user: 'kd',
+        priority: 1,
         iscompleted: false
       };
 
