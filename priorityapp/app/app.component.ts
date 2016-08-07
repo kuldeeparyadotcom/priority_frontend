@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {TaskService} from "./task.service";
 import {Task} from "./task";
 
@@ -11,7 +11,7 @@ import {Task} from "./task";
           <br />
           
           
-           
+           <!--
            <div class="container">
                 <div class="row container">
                 <input class="col-lg-10" type="text" #newTask
@@ -21,15 +21,26 @@ import {Task} from "./task";
                     <button (click)=addNewTask(newTask.value)>Add New Task </button>  
                 </div>
                 </div>
-          </div>
+          </div> -->
 
+           <div class="container">
+                <div class="row container">
+                <input class="col-lg-10" type="text" #newTask
+                    (keyup.enter)="addNewTask(newTask.value); newTask.value=''"
+                     (blur)="addNewTask(newTask.value); newTask.value='' ">
+                <div class="col-lg-2">   
+                    <button (click)=addNewTask(newTask.value)>Add New Task </button>  
+                </div>
+                </div>
+          </div>
+       
           
           <br />
           
             <div *ngFor="let task of tasks">          
               
               <div *ngIf="task.priority === 1 && task.iscompleted === false" class="container-fluid"> 
-                  <button (click)="change_priority(task)" type="button" class="btn btn-danger btn-block form-control">
+                  <button (click)="change_priority(task)" type="button" class="btn btn-danger btn-block">
                       <input (click)="mark_complete(task)" type="checkbox" value="" >
                        {{task.task}}
                    </button>
@@ -70,10 +81,13 @@ import {Task} from "./task";
 })
 export class AppComponent implements OnInit{
   title = "Prioritize Everything!!!";
-  tasks: Task[];
+
+
+  @Input() tasks: Task[];
   error: any;
 
   new_task: Task;
+  newly_added_task: Task;
 
   constructor(private taskService: TaskService) { }
 
@@ -107,7 +121,9 @@ export class AppComponent implements OnInit{
 
   addNewTask(newTask_task: string) {
 
-    if (newTask_task.length) {
+    if (newTask_task) {
+
+      let newly_added_task = {};
 
       this.new_task = {
         task: newTask_task,
@@ -120,6 +136,19 @@ export class AppComponent implements OnInit{
       console.log(this.new_task);
 
       //Add this.new_task to database using http post
+      //call service to add new task
+      //this.taskService.addTask(this.new_task);
+
+      //screen should be loaded automatically after new task addition
+      console.log('current value of tasks');
+      console.log(this.tasks);
+
+      //this.taskService.addTask(this.new_task);
+
+      this.taskService.addTask(this.new_task)
+        .then( newly_added_task => this.getTasks())
+        .catch(error => this.error = error);
+
 
     }
 

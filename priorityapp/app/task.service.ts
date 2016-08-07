@@ -1,14 +1,18 @@
 import {Injectable} from "@angular/core";
 import {TASKS} from "./mock-tasks";
-import {Headers, Http} from "@angular/http";
+import {Headers, Http, RequestOptions, Response} from "@angular/http";
 
 import 'rxjs/add/operator/toPromise';
 import {Task} from "./task";
+import {Observable} from "rxjs/Rx";
+import 'rxjs/Rx';
 
 @Injectable()
 export class TaskService {
 
+  private baseUrl = 'http://192.168.55.57:3000';
   private tasksUrl = 'http://192.168.55.57:3000/tasks/kd';
+  private taskUrl = 'http://192.168.55.57:3000/task';
 
   constructor(private http: Http) { }
 
@@ -19,6 +23,31 @@ export class TaskService {
       .catch(this.handleError);
 
     //Either limit here to show only iscompleted === false tasks or limit at API level itself
+
+  }
+
+
+  addTask(task: Task) : Promise<Task> {
+    console.log('task service to add new task');
+
+    let prepared_task = {
+      "user": "kd",
+      "task": task.task,
+      "priority": 1,
+      "iscompleted": false
+    };
+
+    let body = JSON.stringify(prepared_task);
+    console.log(body);
+
+    let headers = new Headers({ 'Content-Type' : 'application/json' });
+    let options = new RequestOptions({ headers: headers, method: "post" });
+
+    return this.http
+      .post(this.taskUrl, body, options)
+      .toPromise()
+      .then(res => res.json() as Task)
+      .catch(this.handleError);
 
   }
 
